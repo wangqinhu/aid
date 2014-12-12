@@ -3,7 +3,7 @@
 \alias{aid}
 \title{Analysis of inoculation data}
 \usage{
-aid(file)
+aid(file, type)
 }
 \arguments{
 \item{file}{a text file contains inoculation data.}
@@ -20,6 +20,6 @@ demo <- system.file("extdata", "demo1.tsv", package="aid")
 aid(demo)
 }
 \seealso{
-\code{\link{grade.test}} and \code{\link{plot.ino}}.
+\code{\link{grade.test}} and \code{\link{grade.barplot}}.
 }
 

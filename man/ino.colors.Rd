@@ -21,6 +21,6 @@ ino.colors(10)
 plot(1:5, pch = 16, col = ino.colors(5), cex=3)
 }
 \seealso{
-\code{\link{aid}} and \code{\link{plot.ino}}.
+\code{\link{aid}} and \code{\link{grade.barplot}}.
 }
 

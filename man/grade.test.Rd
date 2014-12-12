@@ -20,6 +20,6 @@ dat <- read.table(demo, header = TRUE, check.names=FALSE)
 grade.test(dat)
 }
 \seealso{
-\code{\link{aid}}, and \code{\link{plot.ino}}.
+\code{\link{aid}}, and \code{\link{grade.barplot}}.
 }
 

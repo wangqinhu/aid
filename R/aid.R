@@ -5,7 +5,7 @@
 #' @param n number of colors, usually equal to (or greater that) the number of desease grades.
 #' @param alpha the alpha transparency, a number in [0,1]
 #' @return a vector of contiguous colors.
-#' @seealso \code{\link{aid}} and \code{\link{plot.ino}}.
+#' @seealso \code{\link{aid}} and \code{\link{grade.barplot}}.
 #' @export
 #' @examples
 #' ino.colors(10)
@@ -34,7 +34,7 @@ ino.colors <- function (n, alpha = 1) {
 #' 
 #' @param ino a list contains inoculation grade data.
 #' @return p-value signs indicating the significances between comparisons.
-#' @seealso \code{\link{aid}}, and \code{\link{plot.ino}}.
+#' @seealso \code{\link{aid}}, and \code{\link{grade.barplot}}.
 #' @export
 #' @examples
 #' demo <- system.file("extdata", "demo1.tsv", package="aid")
@@ -70,20 +70,10 @@ grade.test <- function(ino) {
     # perform t test
     t <- t.test(a, b)
     
-    # assign p-value signs
+    # assign p-value symbols
     ino.p[i] <- t$p.value
-    if (ino.p[i] < 0.005) {
-      ino.ps[i] <- c("***")
-    } else if (ino.p[i] < 0.01) {
-      ino.ps[i] <- c("**")
-    } else if (ino.p[i] < 0.05) {
-      ino.ps[i] <- c("*")
-    } else if (ino.p[i] < 0.1) {
-      ino.ps[i] <- c("+")
-    } else {
-      ino.ps[i] <- c(" ")
-    }
-    
+    ino.ps[i] <- sym.pval(ino.p[i])
+
     i <- i + 1;
 
   }
@@ -94,6 +84,9 @@ grade.test <- function(ino) {
 
 #' Plot inoculation data
 #'
+#'
+#'
+#'
 #' Create a barplot for grade inoculation data
 #' 
 #' @param  ino a list contains inoculation grade data.
@@ -102,8 +95,8 @@ grade.test <- function(ino) {
 #' @examples
 #' demo <- system.file("extdata", "demo1.tsv", package="aid")
 #' dat <- read.table(demo, header = TRUE, check.names=FALSE)
-#' ino.barplot(dat)
-ino.barplot <- function(ino) {
+#' grade.barplot(dat)
+grade.barplot <- function(ino) {
 
   # number of grades
   ng <- length(ino)
@@ -129,19 +122,105 @@ ino.barplot <- function(ino) {
 
 }
 
+# assign p-value symbols
+sym.pval <- function(pval) {
+
+  if (pval < 0 || pval > 1)
+    stop("p-value must be between 0 and 1 !\n")
+
+  # threshold
+  th = c(0.001, 0.01, 0.05, 0.1)
+  # symbols
+  sy = c("***", "**", "*", "+", " ")
+
+  if (pval <= th[1]) {
+    ps <- sy[1]
+  } else if (pval <= th[2]) {
+    ps <- sy[2]
+  } else if (pval <= th[3]) {
+    ps <- sy[3]
+  } else if (pval <= th[4]) {
+    ps <- sy[4]
+  } else {
+    ps <- sy[5]
+  }
+
+  return(ps)
+
+}
+
+#Error bar fuction
+error.bar <- function(x, y, upper, lower=upper, length=0.1,...){
+  if(length(x) != length(y) | length(y) !=length(lower) | length(lower) != length(upper))
+    stop("vectors must be same length")
+  arrows(x,y+upper, x, y-lower, angle=90, code=3, length=length, ...)
+}
+
+
+file <- system.file("extdata", "demo2.tsv", package="aid")
+ino <- read.table(file, header = TRUE, check.names=FALSE)
+
+lesion.test <- function(ino) {
+
+  # number of individuals
+  ni <- length(ino)
+
+  # initialization of p-value and p-value signs
+  ino.p <- rep(1, ni)
+  ino.ps <- rep(" ", ni)
+
+  for (i in 2:ni) {
+    t <- t.test(ino[,1], ino[,i])
+    ino.p[i] <- t$p.value
+    ino.ps[i] <- sym.pval(ino.p[i])
+    i < i + 1
+  }
+
+  return(ino.ps)
+
+}
+
+# Lesion size
+lesion.barplot <- function(ino) {
+
+  ino.mean <- colMeans(ino)
+  # number of individuals
+  ni <- length(ino)
+  ino.sd <- NULL
+  for (i in 1: ni) {
+    ino.sd[i] <- sd(ino[,i])
+  }
+  h <-  ino.mean + ino.sd
+  ymax <- max(h) + 1
+  barx <- barplot(ino.mean, col=1,
+                  ylim=c(0, ymax),
+                  ylab="Lesion size")
+  error.bar(barx, ino.mean, ino.sd)
+  ps <- lesion.test(ino)
+  text(barx, h + 0.5, ps)
+
+}
+
+
 #' Analysis of inoculation data
 #'
 #' Analysis and illustration of inoculation data.
 #' 
 #' @param file a text file contains inoculation data.
 #' @return statistical analysis and illustration for inoculation data
-#' @seealso \code{\link{grade.test}} and \code{\link{plot.ino}}.
+#' @seealso \code{\link{grade.test}} and \code{\link{grade.barplot}}.
 #' @export
 #' @examples
 #' library(aid)
 #' demo <- system.file("extdata", "demo1.tsv", package="aid")
 #' aid(demo)
-aid <- function (file) {
+aid <- function (file, type) {
   ino <- read.table(file, header = TRUE, check.names=FALSE)
-  ino.barplot(ino)
+  if (type == "grade") {
+    grade.barplot(ino)
+  } else if (type == "lesion") {
+    lesion.barplot(ino)
+  } else {
+    stop("Unknown inoculation data type!\n")
+  }
 }
