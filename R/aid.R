@@ -2,7 +2,8 @@
 #'
 #' Create a color vector.
 #' 
-#' @param number of colors, usually equal to (or greater that) the number of desease grades.
+#' @param n number of colors, usually equal to (or greater that) the number of desease grades.
+#' @param alpha the alpha transparency, a number in [0,1]
 #' @return a vector of contiguous colors.
 #' @seealso \code{\link{aid}} and \code{\link{plot.ino}}.
 #' @export
@@ -31,12 +32,13 @@ ino.colors <- function (n, alpha = 1) {
 #'
 #' Convert grade data to real observations and perform t test.
 #' 
-#' @param a list contains inoculation grade data.
+#' @param ino a list contains inoculation grade data.
 #' @return p-value signs indicating the significances between comparisons.
 #' @seealso \code{\link{aid}}, and \code{\link{plot.ino}}.
 #' @export
 #' @examples
-#' dat <- read.table(file, header = TRUE, check.names=FALSE)
+#' demo <- system.file("extdata", "demo1.tsv", package="aid")
+#' dat <- read.table(demo, header = TRUE, check.names=FALSE)
 #' grade.test(dat)
 grade.test <- function(ino) {
 
@@ -94,13 +96,14 @@ grade.test <- function(ino) {
 #'
 #' Create a barplot for grade inoculation data
 #' 
-#' @param  a list contains inoculation grade data.
+#' @param  ino a list contains inoculation grade data.
 #' @seealso \code{\link{aid}} and \code{\link{ino.colors}}.
 #' @export
 #' @examples
-#' dat <- read.table(file, header = TRUE, check.names=FALSE)
-#' plot.ino(dat)
-plot.ino <- function(ino) {
+#' demo <- system.file("extdata", "demo1.tsv", package="aid")
+#' dat <- read.table(demo, header = TRUE, check.names=FALSE)
+#' ino.barplot(dat)
+ino.barplot <- function(ino) {
 
   # number of grades
   ng <- length(ino)
@@ -120,7 +123,9 @@ plot.ino <- function(ino) {
   # add significant signs
   text(barx, 1.10, ps)
   # add legend
-  legend("top", legend = colnames(ino), horiz = TRUE, fill=ino.colors(ng))
+  legend("top", legend = colnames(ino),
+         horiz = TRUE,
+         fill=ino.colors(ng), box.col = "white")
 
 }
 
@@ -128,15 +133,15 @@ plot.ino <- function(ino) {
 #'
 #' Analysis and illustration of inoculation data.
 #' 
-#' @param a text file contain inoculation data.
+#' @param file a text file contains inoculation data.
 #' @return statistical analysis and illustration for inoculation data
 #' @seealso \code{\link{grade.test}} and \code{\link{plot.ino}}.
 #' @export
 #' @examples
 #' library(aid)
-#' aid("~/ino.data")
+#' demo <- system.file("extdata", "demo1.tsv", package="aid")
+#' aid(demo)
 aid <- function (file) {
-  welcome()
   ino <- read.table(file, header = TRUE, check.names=FALSE)
-  plot.ino(ino)
+  ino.barplot(ino)
 }

@@ -6,7 +6,7 @@
 grade.test(ino)
 }
 \arguments{
-\item{a}{list contains inoculation grade data.}
+\item{ino}{a list contains inoculation grade data.}
 }
 \value{
 p-value signs indicating the significances between comparisons.
@@ -15,7 +15,8 @@ p-value signs indicating the significances between comparisons.
 Convert grade data to real observations and perform t test.
 }
 \examples{
-dat <- read.table(file, header = TRUE, check.names=FALSE)
+demo <- system.file("extdata", "demo1.tsv", package="aid")
+dat <- read.table(demo, header = TRUE, check.names=FALSE)
 grade.test(dat)
 }
 \seealso{

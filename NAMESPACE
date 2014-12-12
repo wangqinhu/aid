@@ -2,5 +2,5 @@
 
 export(aid)
 export(grade.test)
+export(ino.barplot)
 export(ino.colors)
-export(plot.ino)

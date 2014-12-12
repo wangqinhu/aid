@@ -6,7 +6,9 @@
 ino.colors(n, alpha = 1)
 }
 \arguments{
-\item{number}{of colors, usually equal to (or greater that) the number of desease grades.}
+\item{n}{number of colors, usually equal to (or greater that) the number of desease grades.}
+
+\item{alpha}{the alpha transparency, a number in [0,1]}
 }
 \value{
 a vector of contiguous colors.

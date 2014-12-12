@@ -6,7 +6,7 @@
 aid(file)
 }
 \arguments{
-\item{a}{text file contain inoculation data.}
+\item{file}{a text file contains inoculation data.}
 }
 \value{
 statistical analysis and illustration for inoculation data
@@ -16,7 +16,8 @@ Analysis and illustration of inoculation data.
 }
 \examples{
 library(aid)
-aid("~/ino.data")
+demo <- system.file("extdata", "demo1.tsv", package="aid")
+aid(demo)
 }
 \seealso{
 \code{\link{grade.test}} and \code{\link{plot.ino}}.
