@@ -9,7 +9,7 @@ grade.test(ino)
 \item{ino}{a list contains inoculation grade data.}
 }
 \value{
-p-value signs indicating the significances between comparisons.
+p-value symbols indicating the significances between comparisons.
 }
 \description{
 Convert grade data to real observations and perform t test.
@@ -20,6 +20,6 @@ dat <- read.table(demo, header = TRUE, check.names=FALSE)
 grade.test(dat)
 }
 \seealso{
-\code{\link{aid}}, and \code{\link{grade.barplot}}.
+\code{\link{aid}}, \code{\link{lesion.test}} and \code{\link{grade.barplot}}.
 }
 

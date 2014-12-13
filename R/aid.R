@@ -33,8 +33,8 @@ ino.colors <- function (n, alpha = 1) {
 #' Convert grade data to real observations and perform t test.
 #' 
 #' @param ino a list contains inoculation grade data.
-#' @return p-value signs indicating the significances between comparisons.
-#' @seealso \code{\link{aid}}, and \code{\link{grade.barplot}}.
+#' @return p-value symbols indicating the significances between comparisons.
+#' @seealso \code{\link{aid}}, \code{\link{lesion.test}} and \code{\link{grade.barplot}}.
 #' @export
 #' @examples
 #' demo <- system.file("extdata", "demo1.tsv", package="aid")
@@ -82,15 +82,12 @@ grade.test <- function(ino) {
 
 }
 
-#' Plot inoculation data
-#'
-#'
-#'
+#' Plot grade data
 #'
 #' Create a barplot for grade inoculation data
 #' 
-#' @param  ino a list contains inoculation grade data.
-#' @seealso \code{\link{aid}} and \code{\link{ino.colors}}.
+#' @param ino a list contains inoculation grade data.
+#' @seealso \code{\link{aid}}, \code{\link{grade.test}} and \code{\link{ino.colors}}.
 #' @export
 #' @examples
 #' demo <- system.file("extdata", "demo1.tsv", package="aid")
@@ -122,7 +119,20 @@ grade.barplot <- function(ino) {
 
 }
 
-# assign p-value symbols
+#' Assign p-value symbols
+#'
+#' Convert p-value to symbols
+#'
+#' @param pval pvalue, between 0-1.
+#' @seealso \code{\link{aid}}, \code{\link{grade.test}} and \code{\link{lesion.test}}.
+#' @export
+#' @examples
+#' pval <- c(0.15, 0.10, 0.05, 0.02, 0.01, 0.0001)
+#' n <- length(pval)
+#' sym  <- rep(" ", n)
+#' for (i in 1:n)
+#'   sym[i] <- sym.pval(pval[i])
+#' cat(sym)
 sym.pval <- function(pval) {
 
   if (pval < 0 || pval > 1)
@@ -149,17 +159,36 @@ sym.pval <- function(pval) {
 
 }
 
-#Error bar fuction
+#' Plot error bar
+#'
+#' Adding error bar to a barplot
+#'
+#' @param x position on x-axis.
+#' @param y position on y-axis.
+#' @param upper length of upper error bar
+#' @seealso \code{\link{aid}}, \code{\link{lesion.barplot}} and \code{\link{lesion.test}}.
+#' @export
+#' @examples
+#' barx <- barplot(1:10, ylim=c(0,12))
+#' error.bar(barx, 1:10, rep(1,10))
 error.bar <- function(x, y, upper, lower=upper, length=0.1,...){
   if(length(x) != length(y) | length(y) !=length(lower) | length(lower) != length(upper))
     stop("vectors must be same length")
   arrows(x,y+upper, x, y-lower, angle=90, code=3, length=length, ...)
 }
 
-
-file <- system.file("extdata", "demo2.tsv", package="aid")
-ino <- read.table(file, header = TRUE, check.names=FALSE)
-
+#' Statistical test for lesion data
+#'
+#' Perform t test on lesion data.
+#'
+#' @param ino a list contains inoculation lesion data.
+#' @return p-value symbols indicating the significances between comparisons.
+#' @seealso \code{\link{aid}}, \code{\link{grade.test}} and \code{\link{lesion.barplot}}.
+#' @export
+#' @examples
+#' demo <- system.file("extdata", "demo2.tsv", package="aid")
+#' dat <- read.table(demo, header = TRUE, check.names=FALSE)
+#' lesion.test(dat)
 lesion.test <- function(ino) {
 
   # number of individuals
@@ -180,7 +209,17 @@ lesion.test <- function(ino) {
 
 }
 
-# Lesion size
+#' Plot lesion data
+#'
+#' Create a barplot for lesion inoculation data
+#'
+#' @param  ino a list contains inoculation lesion data.
+#' @seealso \code{\link{aid}}, \code{\link{lesion.test}} and \code{\link{grade.barplot}}.
+#' @export
+#' @examples
+#' demo <- system.file("extdata", "demo2.tsv", package="aid")
+#' dat <- read.table(demo, header = TRUE, check.names=FALSE)
+#' lesion.barplot(dat)
 lesion.barplot <- function(ino) {
 
   ino.mean <- colMeans(ino)
@@ -207,13 +246,18 @@ lesion.barplot <- function(ino) {
 #' Analysis and illustration of inoculation data.
 #' 
 #' @param file a text file contains inoculation data.
+#' @param type grade or lesion, must be specified
 #' @return statistical analysis and illustration for inoculation data
-#' @seealso \code{\link{grade.test}} and \code{\link{grade.barplot}}.
+#' @seealso \code{\link{grade.test}}, \code{\link{lesion.test}}, \code{\link{grade.barplot}} and \code{\link{lesion.barplot}}.
 #' @export
 #' @examples
 #' library(aid)
-#' demo <- system.file("extdata", "demo1.tsv", package="aid")
-#' aid(demo)
+#' # grade data
+#' demo1 <- system.file("extdata", "demo1.tsv", package="aid")
+#' aid(demo1, type = "grade")
+#' # lesion data
+#' demo2 <- system.file("extdata", "demo2.tsv", package="aid")
+#' aid(demo2, type = "lesion")
 aid <- function (file, type) {
   ino <- read.table(file, header = TRUE, check.names=FALSE)
   if (type == "grade") {

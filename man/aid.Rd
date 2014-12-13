@@ -7,6 +7,8 @@ aid(file, type)
 }
 \arguments{
 \item{file}{a text file contains inoculation data.}
+
+\item{type}{grade or lesion, must be specified}
 }
 \value{
 statistical analysis and illustration for inoculation data
@@ -16,10 +18,14 @@ Analysis and illustration of inoculation data.
 }
 \examples{
 library(aid)
-demo <- system.file("extdata", "demo1.tsv", package="aid")
-aid(demo)
+# grade data
+demo1 <- system.file("extdata", "demo1.tsv", package="aid")
+aid(demo1, type = "grade")
+# lesion data
+demo2 <- system.file("extdata", "demo2.tsv", package="aid")
+aid(demo2, type = "lesion")
 }
 \seealso{
-\code{\link{grade.test}} and \code{\link{grade.barplot}}.
+\code{\link{grade.test}}, \code{\link{lesion.test}}, \code{\link{grade.barplot}} and \code{\link{lesion.barplot}}.
 }
 
