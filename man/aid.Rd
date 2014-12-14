@@ -8,7 +8,7 @@ aid(file, type)
 \arguments{
 \item{file}{a text file contains inoculation data.}
 
-\item{type}{grade or lesion, must be specified}
+\item{type}{grade, lesion or biomass (qPCR), must be specified}
 }
 \value{
 statistical analysis and illustration for inoculation data
@@ -24,8 +24,10 @@ aid(demo1, type = "grade")
 # lesion data
 demo2 <- system.file("extdata", "demo2.tsv", package="aid")
 aid(demo2, type = "lesion")
+demo3 <- system.file("extdata", "demo3.tsv", package="aid")
+aid(demo3, type = "biomass")
 }
 \seealso{
-\code{\link{grade.test}}, \code{\link{lesion.test}}, \code{\link{grade.barplot}} and \code{\link{lesion.barplot}}.
+\code{\link{grade.test}}, \code{\link{lesion.test}}, \code{\link{biomass.test}}, \code{\link{grade.barplot}}, \code{\link{lesion.barplot}} and \code{\link{biomass.barplot}}.
 }
 

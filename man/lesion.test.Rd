@@ -20,6 +20,6 @@ dat <- read.table(demo, header = TRUE, check.names=FALSE)
 lesion.test(dat)
 }
 \seealso{
-\code{\link{aid}}, \code{\link{grade.test}} and \code{\link{lesion.barplot}}.
+\code{\link{aid}}, \code{\link{lesion.barplot}}, \code{\link{biomass.test}} and \code{\link{grade.test}}.
 }
 

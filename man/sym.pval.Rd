@@ -20,6 +20,6 @@ for (i in 1:n)
 cat(sym)
 }
 \seealso{
-\code{\link{aid}}, \code{\link{grade.test}} and \code{\link{lesion.test}}.
+\code{\link{aid}}, \code{\link{grade.test}}, \code{\link{lesion.test}} and \code{\link{biomass.test}}.
 }
 

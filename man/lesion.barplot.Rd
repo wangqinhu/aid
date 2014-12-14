@@ -17,6 +17,6 @@ dat <- read.table(demo, header = TRUE, check.names=FALSE)
 lesion.barplot(dat)
 }
 \seealso{
-\code{\link{aid}}, \code{\link{lesion.test}} and \code{\link{grade.barplot}}.
+\code{\link{aid}}, \code{\link{lesion.test}}, \code{\link{biomass.barplot}} and \code{\link{grade.barplot}}.
 }
 

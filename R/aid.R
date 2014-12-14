@@ -34,7 +34,7 @@ ino.colors <- function (n, alpha = 1) {
 #' 
 #' @param ino a list contains inoculation grade data.
 #' @return p-value symbols indicating the significances between comparisons.
-#' @seealso \code{\link{aid}}, \code{\link{lesion.test}} and \code{\link{grade.barplot}}.
+#' @seealso \code{\link{aid}}, \code{\link{grade.barplot}}, \code{\link{lesion.test}} and \code{\link{biomass.test}}.
 #' @export
 #' @examples
 #' demo <- system.file("extdata", "demo1.tsv", package="aid")
@@ -87,7 +87,7 @@ grade.test <- function(ino) {
 #' Create a barplot for grade inoculation data
 #' 
 #' @param ino a list contains inoculation grade data.
-#' @seealso \code{\link{aid}}, \code{\link{grade.test}} and \code{\link{ino.colors}}.
+#' @seealso \code{\link{aid}}, \code{\link{ino.colors}}, \code{\link{grade.test}}, \code{\link{lesion.barplot}} and \code{\link{biomass.barplot}}..
 #' @export
 #' @examples
 #' demo <- system.file("extdata", "demo1.tsv", package="aid")
@@ -124,7 +124,7 @@ grade.barplot <- function(ino) {
 #' Convert p-value to symbols
 #'
 #' @param pval pvalue, between 0-1.
-#' @seealso \code{\link{aid}}, \code{\link{grade.test}} and \code{\link{lesion.test}}.
+#' @seealso \code{\link{aid}}, \code{\link{grade.test}}, \code{\link{lesion.test}} and \code{\link{biomass.test}}.
 #' @export
 #' @examples
 #' pval <- c(0.15, 0.10, 0.05, 0.02, 0.01, 0.0001)
@@ -166,7 +166,7 @@ sym.pval <- function(pval) {
 #' @param x position on x-axis.
 #' @param y position on y-axis.
 #' @param upper length of upper error bar
-#' @seealso \code{\link{aid}}, \code{\link{lesion.barplot}} and \code{\link{lesion.test}}.
+#' @seealso \code{\link{aid}}, \code{\link{lesion.barplot}} and \code{\link{biomass.barplot}}.
 #' @export
 #' @examples
 #' barx <- barplot(1:10, ylim=c(0,12))
@@ -183,7 +183,7 @@ error.bar <- function(x, y, upper, lower=upper, length=0.1,...){
 #'
 #' @param ino a list contains inoculation lesion data.
 #' @return p-value symbols indicating the significances between comparisons.
-#' @seealso \code{\link{aid}}, \code{\link{grade.test}} and \code{\link{lesion.barplot}}.
+#' @seealso \code{\link{aid}}, \code{\link{lesion.barplot}}, \code{\link{biomass.test}} and \code{\link{grade.test}}.
 #' @export
 #' @examples
 #' demo <- system.file("extdata", "demo2.tsv", package="aid")
@@ -214,7 +214,7 @@ lesion.test <- function(ino) {
 #' Create a barplot for lesion inoculation data
 #'
 #' @param  ino a list contains inoculation lesion data.
-#' @seealso \code{\link{aid}}, \code{\link{lesion.test}} and \code{\link{grade.barplot}}.
+#' @seealso \code{\link{aid}}, \code{\link{lesion.test}}, \code{\link{biomass.barplot}} and \code{\link{grade.barplot}}.
 #' @export
 #' @examples
 #' demo <- system.file("extdata", "demo2.tsv", package="aid")
@@ -240,15 +240,109 @@ lesion.barplot <- function(ino) {
 
 }
 
+#' Statistical test for biomass data
+#'
+#' Perform t test on biomass (qPCR) data.
+#'
+#' @param ino a list contains inoculation biomass data.
+#' @return p-value symbols indicating the significances between comparisons.
+#' @seealso \code{\link{aid}}, \code{\link{biomass.barplot}}, \code{\link{lesion.test}} and \code{\link{grade.test}}.
+#' @export
+#' @examples
+#' bio<-c(0.82, 3.14, 0.88, 3.21, 0.85, 3.20)
+#' dim(bio)<-c(2,3)
+#' biomass.test(bio)
+biomass.test <- function(bio) {
+
+  # number of individuals
+  ni <- dim(bio)[1]
+
+  # initialization of p-value and p-value signs
+  ino.p <- rep(1, ni)
+  ino.ps <- rep(" ", ni)
+
+  for (i in 2:ni) {
+    t <- t.test(bio[1,], bio[i,])
+    ino.p[i] <- t$p.value
+    ino.ps[i] <- sym.pval(ino.p[i])
+    i < i + 1
+  }
+
+  return(ino.ps)
+
+}
+
+#' Plot biomass data
+#'
+#' Create a barplot for biomass (qPCR) inoculation data
+#'
+#' @param  ino a list contains inoculation biomass data.
+#' @seealso \code{\link{aid}}, \code{\link{biomass.test}}, \code{\link{lesion.barplot}} and \code{\link{grade.barplot}}.
+#' @export
+#' @examples
+#' demo <- system.file("extdata", "demo3.tsv", package="aid")
+#' dat <- read.table(demo, header = TRUE, check.names=FALSE)
+#' biomass.barplot(dat)
+biomass.barplot <- function(ino) {
+
+  # qPCR ct
+  ct <- ino
+  # Number of sample
+  num_sam <- dim(ino)[1]
+  # Number of repeat (biological or technical)
+  num_rep <- dim(ino)[2]/2
+  # Line of control
+  lctrl <- 1
+
+  # calculate relative biomass by ddct method for qPCR
+  bio<-rep(NA, num_sam * num_rep)
+  dim(bio)<-c(num_sam, num_rep)
+
+  # ctr_ref
+  ref_calibrator<-mean(as.numeric(ct[lctrl,1:num_rep]))
+  calibrator<-mean(as.numeric(ct[lctrl,(num_rep+1):(2*num_rep)]-ref_calibrator))
+  # bio <- 2^ddct
+  for (i in 1:num_sam) {
+    ref<-mean(as.numeric(ct[i,1:num_rep]))
+    # dCt
+    dct<-ct[i,(num_rep+1):(2*num_rep)]-ref
+    # ddCt
+    ddct<-dct-calibrator
+    # fold
+    bio[i,1:num_rep]<-2^-ddct
+  }
+
+  # fold
+  fold<-t(bio)
+
+  fold.means=rep(NA, num_sam)
+  fold.sd=rep(NA, num_sam)
+
+  for (i in 1:num_sam) {
+    fold.means[i]<-mean(fold[,i])
+    fold.sd[i]<-sd(fold[,i])
+  }
+
+  h <- fold.means + fold.sd
+  ymax <- max(h) + 1
+  barx <- barplot(fold.means, col=1, ylim=c(0,ymax+1),
+                  names.arg=row.names(ct),
+                  xlab="Individuals", ylab="Pathogen/Host ratio")
+  error.bar(barx, fold.means, fold.sd)
+
+  ps <- biomass.test(bio)
+  text(barx, h + 0.5, ps)
+
+}
 
 #' Analysis of inoculation data
 #'
 #' Analysis and illustration of inoculation data.
 #' 
 #' @param file a text file contains inoculation data.
-#' @param type grade or lesion, must be specified
+#' @param type grade, lesion or biomass (qPCR), must be specified
 #' @return statistical analysis and illustration for inoculation data
-#' @seealso \code{\link{grade.test}}, \code{\link{lesion.test}}, \code{\link{grade.barplot}} and \code{\link{lesion.barplot}}.
+#' @seealso \code{\link{grade.test}}, \code{\link{lesion.test}}, \code{\link{biomass.test}}, \code{\link{grade.barplot}}, \code{\link{lesion.barplot}} and \code{\link{biomass.barplot}}.
 #' @export
 #' @examples
 #' library(aid)
@@ -258,12 +352,16 @@ lesion.barplot <- function(ino) {
 #' # lesion data
 #' demo2 <- system.file("extdata", "demo2.tsv", package="aid")
 #' aid(demo2, type = "lesion")
+#' demo3 <- system.file("extdata", "demo3.tsv", package="aid")
+#' aid(demo3, type = "biomass")
 aid <- function (file, type) {
   ino <- read.table(file, header = TRUE, check.names=FALSE)
   if (type == "grade") {
     grade.barplot(ino)
   } else if (type == "lesion") {
     lesion.barplot(ino)
+  } else if (type == "biomass") {
+    biomass.barplot(ino)
   } else {
     stop("Unknown inoculation data type!\n")
   }

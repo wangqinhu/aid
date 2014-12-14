@@ -20,6 +20,6 @@ barx <- barplot(1:10, ylim=c(0,12))
 error.bar(barx, 1:10, rep(1,10))
 }
 \seealso{
-\code{\link{aid}}, \code{\link{lesion.barplot}} and \code{\link{lesion.test}}.
+\code{\link{aid}}, \code{\link{lesion.barplot}} and \code{\link{biomass.barplot}}.
 }
 
