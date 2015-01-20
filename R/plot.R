@@ -23,35 +23,55 @@ error.bar <- function(x, y, upper, lower=upper, length=0.1,...){
 #' 
 #' @param ino a list contains inoculation grade data.
 #' @param alternative a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less". You can specify just the initial letter.
-#' @seealso \code{\link{aid}}, \code{\link{ino.colors}}, \code{\link{grade.test}}, \code{\link{lesion.barplot}} and \code{\link{biomass.barplot}}..
+#' @seealso \code{\link{aid}}, \code{\link{ino.colors}}, \code{\link{grade.test}}, \code{\link{dsi}}, \code{\link{lesion.barplot}} and \code{\link{biomass.barplot}}.
 #' @export
 #' @examples
 #' demo <- system.file("extdata", "demo1.tsv", package="aid")
 #' dat <- read.table(demo, header = TRUE, check.names=FALSE)
 #' grade.barplot(dat, alternative)
 grade.barplot <- function(ino, alternative) {
-  
+
   # number of grades
   ng <- length(ino)
   
   # perform t test
   ps <- grade.test(ino, alternative)
   
+  # caculate disease severity index
+  ds <- dsi(ino)
+  
   # plot
+  par(mar=c(3,1,2,5))
   barx <- barplot(prop.table(t(as.matrix(ino)),2),
                   col=ino.colors(ng),
-                  ylim = c(0,1.25),
-                  #hor
+                  ylim = c(0,1.35),
+                  xpd=TRUE,
                   axes = FALSE)
   
+  # number of individuals
+  ni <- dim(ino)[1]
+  
+  # Add legend to top right, outside plot region
+  legend(barx[ni] + 1, 1,  box.col = 8, bg="gray95", legend = colnames(ino), fill=ino.colors(ng), title="grade")
+
+  rect(barx[1] - 0.5, 1.05, barx[ni] + 0.5, 1.35, border = 8, col="gray95")
+  
   # add total number of leaves
-  text(barx, 1.05, rowSums(ino))
+  text(barx, 1.1, rowSums(ino))
+  text(barx[ni]+1.2, 1.1, "no")
+  
   # add significant signs
-  text(barx, 1.10, ps)
+  text(barx, 1.2, ps)
+  text(barx[ni]+1.2, 1.2, "sig")
+  
+  # add disease severity index
+  text(barx, 1.3, ds)
+  text(barx[ni]+1.2, 1.3, "dsi")
+  
   # add legend
-  legend("top", legend = colnames(ino),
-         horiz = TRUE,
-         fill=ino.colors(ng), box.col = "white")
+  #legend("top", legend = colnames(ino),
+  #       horiz = TRUE,
+  #       fill=ino.colors(ng), )
   
 }
 

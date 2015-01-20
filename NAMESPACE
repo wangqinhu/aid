@@ -3,6 +3,7 @@
 export(aid)
 export(biomass.barplot)
 export(biomass.test)
+export(dsi)
 export(error.bar)
 export(grade.barplot)
 export(grade.test)

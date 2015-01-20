@@ -23,6 +23,6 @@ dat <- read.table(demo, header = TRUE, check.names=FALSE)
 grade.test(dat, alternative = "t")
 }
 \seealso{
-\code{\link{aid}}, \code{\link{grade.barplot}}, \code{\link{lesion.test}} and \code{\link{biomass.test}}.
+\code{\link{aid}}, \code{\link{grade.barplot}}, \code{\link{dsi}}, \code{\link{lesion.test}} and \code{\link{biomass.test}}.
 }
 

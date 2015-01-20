@@ -20,6 +20,6 @@ dat <- read.table(demo, header = TRUE, check.names=FALSE)
 grade.barplot(dat, alternative)
 }
 \seealso{
-\code{\link{aid}}, \code{\link{ino.colors}}, \code{\link{grade.test}}, \code{\link{lesion.barplot}} and \code{\link{biomass.barplot}}..
+\code{\link{aid}}, \code{\link{ino.colors}}, \code{\link{grade.test}}, \code{\link{dsi}}, \code{\link{lesion.barplot}} and \code{\link{biomass.barplot}}.
 }
 

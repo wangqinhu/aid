@@ -5,7 +5,7 @@
 #' @param ino a list contains inoculation grade data.
 #' @param alternative a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less". You can specify just the initial letter.
 #' @return p-value symbols indicating the significances between comparisons.
-#' @seealso \code{\link{aid}}, \code{\link{grade.barplot}}, \code{\link{lesion.test}} and \code{\link{biomass.test}}.
+#' @seealso \code{\link{aid}}, \code{\link{grade.barplot}}, \code{\link{dsi}}, \code{\link{lesion.test}} and \code{\link{biomass.test}}.
 #' @export
 #' @examples
 #' demo <- system.file("extdata", "demo1.tsv", package="aid")
