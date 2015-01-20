@@ -31,6 +31,9 @@ error.bar <- function(x, y, upper, lower=upper, length=0.1,...){
 #' grade.barplot(dat, alternative)
 grade.barplot <- function(ino, alternative) {
 
+  # number of individuals
+  ni <- dim(ino)[1]
+
   # number of grades
   ng <- length(ino)
   
@@ -41,20 +44,15 @@ grade.barplot <- function(ino, alternative) {
   ds <- dsi(ino)
   
   # plot
-  par(mar=c(3,1,2,5))
   barx <- barplot(prop.table(t(as.matrix(ino)),2),
                   col=ino.colors(ng),
+                  xlim = c(0,ni+4),
                   ylim = c(0,1.35),
                   xpd=TRUE,
                   axes = FALSE)
-  
-  # number of individuals
-  ni <- dim(ino)[1]
-  
-  # Add legend to top right, outside plot region
-  legend(barx[ni] + 1, 1,  box.col = 8, bg="gray95", legend = colnames(ino), fill=ino.colors(ng), title="grade")
 
-  rect(barx[1] - 0.5, 1.05, barx[ni] + 0.5, 1.35, border = 8, col="gray95")
+  # highlight data region
+  rect(barx[1] - 0.5, 1.05, barx[ni] + 0.5, 1.35, border = 2, col="gray95")
   
   # add total number of leaves
   text(barx, 1.1, rowSums(ino))
@@ -69,10 +67,12 @@ grade.barplot <- function(ino, alternative) {
   text(barx[ni]+1.2, 1.3, "dsi")
   
   # add legend
-  #legend("top", legend = colnames(ino),
-  #       horiz = TRUE,
-  #       fill=ino.colors(ng), )
-  
+  legend(barx[ni]+ 0.8, 1, inset = c(-0.2,0),
+         box.col = 3, bg="gray95",
+         fill=ino.colors(ng),
+         legend = colnames(ino),
+         title="grade")
+
 }
 
 
