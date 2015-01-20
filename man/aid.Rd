@@ -27,8 +27,9 @@ aid(demo1, type = "grade", alternative="less")
 # lesion data
 demo2 <- system.file("extdata", "demo2.tsv", package="aid")
 aid(demo2, type = "lesion", alternative="two.sided")
+# biomass data
 demo3 <- system.file("extdata", "demo3.tsv", package="aid")
-aid(demo3, type = "biomass", alternative="two.sided")
+aid(demo3, type = "biomass", alternative="greater")
 }
 \seealso{
 \code{\link{grade.test}}, \code{\link{lesion.test}}, \code{\link{biomass.test}}, \code{\link{grade.barplot}}, \code{\link{lesion.barplot}} and \code{\link{biomass.barplot}}.

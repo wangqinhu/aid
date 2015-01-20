@@ -16,8 +16,9 @@
 #' # lesion data
 #' demo2 <- system.file("extdata", "demo2.tsv", package="aid")
 #' aid(demo2, type = "lesion", alternative="two.sided")
+#' # biomass data
 #' demo3 <- system.file("extdata", "demo3.tsv", package="aid")
-#' aid(demo3, type = "biomass", alternative="two.sided")
+#' aid(demo3, type = "biomass", alternative="greater")
 aid <- function (file, type, alternative="two.sided") {
   ino <- read.table(file, header = TRUE, check.names=FALSE)
   if (type == "grade") {
