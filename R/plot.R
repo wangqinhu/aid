@@ -165,7 +165,7 @@ biomass.barplot <- function(ino, alternative) {
   ymax <- max(h) + 1
   barx <- barplot(fold.means, col=1, ylim=c(0,ymax+1),
                   names.arg=row.names(ct),
-                  xlab="Individuals", ylab="Pathogen/Host ratio")
+                  xlab="Individuals", ylab="Pathogen/Host DNA ratio")
   error.bar(barx, fold.means, fold.sd)
   
   ps <- biomass.test(bio, alternative)
