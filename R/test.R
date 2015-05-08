@@ -38,8 +38,8 @@ grade.test <- function(ino, alternative) {
       }
     }
     
-    # perform t test
-    t <- t.test(a, b, alternative)
+    # perform wilcox test
+    t <- wilcox.test(a, b, alternative)
     
     # assign p-value symbols
     ino.p[i] <- t$p.value
