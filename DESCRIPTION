@@ -7,3 +7,4 @@ Author: Qinhu Wang
 Maintainer: Qinhu Wang <wangqinhu@nwafu.edu.cn>
 Description: Analysis and illustration of inoculation data
 License: MIT
+RoxygenNote: 5.0.1

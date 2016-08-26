@@ -23,13 +23,14 @@ error.bar <- function(x, y, upper, lower=upper, length=0.1,...){
 #' 
 #' @param ino a list contains inoculation grade data.
 #' @param alternative a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less". You can specify just the initial letter.
+#' @param paired a character string specifying if the experiment is paired, can be TRUE or FALSE (default). You can specify just the initial letter.
 #' @seealso \code{\link{aid}}, \code{\link{ino.colors}}, \code{\link{grade.test}}, \code{\link{dsi}}, \code{\link{lesion.barplot}} and \code{\link{biomass.barplot}}.
 #' @export
 #' @examples
 #' demo <- system.file("extdata", "demo1.tsv", package="aid")
 #' dat <- read.table(demo, header = TRUE, check.names=FALSE)
-#' grade.barplot(dat, alternative)
-grade.barplot <- function(ino, alternative) {
+#' grade.barplot(dat, alternative = "t", paired = FALSE)
+grade.barplot <- function(ino, alternative, paired, ...) {
 
   # number of individuals
   ni <- dim(ino)[1]
@@ -38,7 +39,7 @@ grade.barplot <- function(ino, alternative) {
   ng <- length(ino)
   
   # perform t test
-  ps <- grade.test(ino, alternative)
+  ps <- grade.test(ino, alternative, paired = paired)
   
   # caculate disease severity index
   ds <- dsi(ino)
@@ -49,7 +50,8 @@ grade.barplot <- function(ino, alternative) {
                   xlim = c(0,ni+4),
                   ylim = c(0,1.35),
                   xpd=TRUE,
-                  axes = FALSE)
+                  axes = FALSE,
+                  ...)
 
   # highlight data region
   rect(barx[1] - 0.5, 1.05, barx[ni] + 0.5, 1.35, border = 2, col="gray95")
@@ -82,28 +84,30 @@ grade.barplot <- function(ino, alternative) {
 #'
 #' @param ino a list contains inoculation lesion data.
 #' @param alternative a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less". You can specify just the initial letter.
+#' @param paired a character string specifying if the experiment is paired, can be TRUE or FALSE (default). You can specify just the initial letter.
 #' @seealso \code{\link{aid}}, \code{\link{lesion.test}}, \code{\link{biomass.barplot}} and \code{\link{grade.barplot}}.
 #' @export
 #' @examples
 #' demo <- system.file("extdata", "demo2.tsv", package="aid")
 #' dat <- read.table(demo, header = TRUE, check.names=FALSE)
-#' lesion.barplot(dat, alternative)
-lesion.barplot <- function(ino, alternative) {
+#' lesion.barplot(dat, alternative = "t", paired = FALSE)
+lesion.barplot <- function(ino, alternative, paired, ...) {
   
-  ino.mean <- colMeans(ino)
+  ino.mean <- colMeans(ino, na.rm = TRUE)
   # number of individuals
   ni <- length(ino)
   ino.sd <- NULL
   for (i in 1: ni) {
-    ino.sd[i] <- sd(ino[,i])
+    ino.sd[i] <- sd(ino[,i], na.rm = TRUE)
   }
   h <-  ino.mean + ino.sd
   ymax <- max(h) + 1
   barx <- barplot(ino.mean, col=1,
                   ylim=c(0, ymax),
-                  ylab="Lesion size")
+                  ylab="Lesion size",
+                  ...)
   error.bar(barx, ino.mean, ino.sd)
-  ps <- lesion.test(ino, alternative)
+  ps <- lesion.test(ino, alternative, paired = paired)
   text(barx, h + 0.5, ps)
   
 }
@@ -115,13 +119,14 @@ lesion.barplot <- function(ino, alternative) {
 #'
 #' @param  ino a list contains inoculation biomass data.
 #' @param alternative a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less". You can specify just the initial letter.
+#' @param paired a character string specifying if the experiment is paired, can be TRUE or FALSE (default). You can specify just the initial letter.
 #' @seealso \code{\link{aid}}, \code{\link{biomass.test}}, \code{\link{lesion.barplot}} and \code{\link{grade.barplot}}.
 #' @export
 #' @examples
 #' demo <- system.file("extdata", "demo3.tsv", package="aid")
 #' dat <- read.table(demo, header = TRUE, check.names=FALSE)
-#' biomass.barplot(dat, alternative)
-biomass.barplot <- function(ino, alternative) {
+#' biomass.barplot(dat, alternative = "t", paired = FALSE)
+biomass.barplot <- function(ino, alternative, paired, ...) {
   
   # qPCR ct
   ct <- ino
@@ -162,13 +167,14 @@ biomass.barplot <- function(ino, alternative) {
   }
   
   h <- fold.means + fold.sd
-  ymax <- max(h) + 1
-  barx <- barplot(fold.means, col=1, ylim=c(0,ymax+1),
+  ymax <- max(h) + 0.2
+  barx <- barplot(fold.means, col=1, ylim=c(0,ymax),
                   names.arg=row.names(ct),
-                  xlab="Individuals", ylab="Relative pathogen DNA ratio")
+                  xlab="Individuals", ylab="Relative pathogen DNA ratio",
+                  ...)
   error.bar(barx, fold.means, fold.sd)
   
-  ps <- biomass.test(bio, alternative)
-  text(barx, h + 0.5, ps)
+  ps <- biomass.test(bio, alternative, paired = paired)
+  text(barx, h + 0.2, ps)
   
 }

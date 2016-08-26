@@ -4,14 +4,15 @@
 #' 
 #' @param ino a list contains inoculation grade data.
 #' @param alternative a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less". You can specify just the initial letter.
+#' @param paired a character string specifying if the experiment is paired, can be TRUE or FALSE (default). You can specify just the initial letter.
 #' @return p-value symbols indicating the significances between comparisons.
 #' @seealso \code{\link{aid}}, \code{\link{grade.barplot}}, \code{\link{dsi}}, \code{\link{lesion.test}} and \code{\link{biomass.test}}.
 #' @export
 #' @examples
 #' demo <- system.file("extdata", "demo1.tsv", package="aid")
 #' dat <- read.table(demo, header = TRUE, check.names=FALSE)
-#' grade.test(dat, alternative = "t")
-grade.test <- function(ino, alternative) {
+#' grade.test(dat, alternative = "t", paired = FALSE)
+grade.test <- function(ino, alternative, paired) {
   
   # number of individuals and grades
   ni <- dim(ino)[1]
@@ -39,7 +40,7 @@ grade.test <- function(ino, alternative) {
     }
     
     # perform wilcox test
-    t <- wilcox.test(a, b, alternative)
+    t <- wilcox.test(a, b, alternative, paired = paired)
     
     # assign p-value symbols
     ino.p[i] <- t$p.value
@@ -60,14 +61,15 @@ grade.test <- function(ino, alternative) {
 #'
 #' @param ino a list contains inoculation lesion data.
 #' @param alternative a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less". You can specify just the initial letter.
+#' @param paired a character string specifying if the experiment is paired, can be TRUE or FALSE (default). You can specify just the initial letter.
 #' @return p-value symbols indicating the significances between comparisons.
 #' @seealso \code{\link{aid}}, \code{\link{lesion.barplot}}, \code{\link{biomass.test}} and \code{\link{grade.test}}.
 #' @export
 #' @examples
 #' demo <- system.file("extdata", "demo2.tsv", package="aid")
 #' dat <- read.table(demo, header = TRUE, check.names=FALSE)
-#' lesion.test(dat, alternative = "t")
-lesion.test <- function(ino, alternative) {
+#' lesion.test(dat, alternative = "t", paired = FALSE)
+lesion.test <- function(ino, alternative, paired) {
   
   # number of individuals
   ni <- length(ino)
@@ -77,7 +79,7 @@ lesion.test <- function(ino, alternative) {
   ino.ps <- rep(" ", ni)
   
   for (i in 2:ni) {
-    t <- t.test(ino[,1], ino[,i], alternative)
+    t <- t.test(ino[,1], ino[,i], alternative, paired = paired)
     ino.p[i] <- t$p.value
     ino.ps[i] <- sym.pval(ino.p[i])
     i < i + 1
@@ -94,14 +96,15 @@ lesion.test <- function(ino, alternative) {
 #'
 #' @param ino a list contains inoculation biomass data.
 #' @param alternative a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less". You can specify just the initial letter.
+#' @param paired a character string specifying if the experiment is paired, can be TRUE or FALSE (default). You can specify just the initial letter.
 #' @return p-value symbols indicating the significances between comparisons.
 #' @seealso \code{\link{aid}}, \code{\link{biomass.barplot}}, \code{\link{lesion.test}} and \code{\link{grade.test}}.
 #' @export
 #' @examples
 #' bio<-c(0.82, 3.14, 0.88, 3.21, 0.85, 3.20)
 #' dim(bio)<-c(2,3)
-#' biomass.test(bio, alternative = "t")
-biomass.test <- function(bio, alternative) {
+#' biomass.test(bio, alternative = "t", paired = FALSE)
+biomass.test <- function(bio, alternative, paired) {
   
   # number of individuals
   ni <- dim(bio)[1]
@@ -111,7 +114,7 @@ biomass.test <- function(bio, alternative) {
   ino.ps <- rep(" ", ni)
   
   for (i in 2:ni) {
-    t <- t.test(bio[1,], bio[i,], alternative)
+    t <- t.test(bio[1,], bio[i,], alternative, paired = paired)
     ino.p[i] <- t$p.value
     ino.ps[i] <- sym.pval(ino.p[i])
     i < i + 1
