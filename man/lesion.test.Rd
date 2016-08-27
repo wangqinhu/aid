@@ -4,12 +4,14 @@
 \alias{lesion.test}
 \title{Statistical test for lesion data}
 \usage{
-lesion.test(ino, alternative)
+lesion.test(ino, alternative, paired)
 }
 \arguments{
 \item{ino}{a list contains inoculation lesion data.}
 
 \item{alternative}{a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less". You can specify just the initial letter.}
+
+\item{paired}{a character string specifying if the experiment is paired, can be TRUE or FALSE (default). You can specify just the initial letter.}
 }
 \value{
 p-value symbols indicating the significances between comparisons.
@@ -20,7 +22,7 @@ Perform t test on lesion data.
 \examples{
 demo <- system.file("extdata", "demo2.tsv", package="aid")
 dat <- read.table(demo, header = TRUE, check.names=FALSE)
-lesion.test(dat, alternative = "t")
+lesion.test(dat, alternative = "t", paired = FALSE)
 }
 \seealso{
 \code{\link{aid}}, \code{\link{lesion.barplot}}, \code{\link{biomass.test}} and \code{\link{grade.test}}.

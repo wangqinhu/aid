@@ -4,12 +4,14 @@
 \alias{grade.test}
 \title{Statistical test for grade data}
 \usage{
-grade.test(ino, alternative)
+grade.test(ino, alternative, paired)
 }
 \arguments{
 \item{ino}{a list contains inoculation grade data.}
 
 \item{alternative}{a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less". You can specify just the initial letter.}
+
+\item{paired}{a character string specifying if the experiment is paired, can be TRUE or FALSE (default). You can specify just the initial letter.}
 }
 \value{
 p-value symbols indicating the significances between comparisons.
@@ -20,7 +22,7 @@ Convert grade data to real observations and perform t test.
 \examples{
 demo <- system.file("extdata", "demo1.tsv", package="aid")
 dat <- read.table(demo, header = TRUE, check.names=FALSE)
-grade.test(dat, alternative = "t")
+grade.test(dat, alternative = "t", paired = FALSE)
 }
 \seealso{
 \code{\link{aid}}, \code{\link{grade.barplot}}, \code{\link{dsi}}, \code{\link{lesion.test}} and \code{\link{biomass.test}}.

@@ -4,7 +4,7 @@
 \alias{aid}
 \title{Analysis of inoculation data}
 \usage{
-aid(file, type, alternative = "two.sided")
+aid(file, type, alternative = "two.sided", paired = FALSE, ...)
 }
 \arguments{
 \item{file}{a text file contains inoculation data.}
@@ -12,6 +12,8 @@ aid(file, type, alternative = "two.sided")
 \item{type}{grade, lesion or biomass (qPCR), must be specified}
 
 \item{alternative}{a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less". You can specify just the initial letter.}
+
+\item{paired}{a character string specifying if the experiment is paired, can be TRUE or FALSE (default). You can specify just the initial letter.}
 }
 \value{
 statistical analysis and illustration for inoculation data
@@ -23,13 +25,13 @@ Analysis and illustration of inoculation data.
 library(aid)
 # grade data
 demo1 <- system.file("extdata", "demo1.tsv", package="aid")
-aid(demo1, type = "grade", alternative="less")
+aid(demo1, type = "grade", alternative="less", paired=FALSE)
 # lesion data
 demo2 <- system.file("extdata", "demo2.tsv", package="aid")
-aid(demo2, type = "lesion", alternative="two.sided")
+aid(demo2, type = "lesion", alternative="two.sided", paired=FALSE)
 # biomass data
 demo3 <- system.file("extdata", "demo3.tsv", package="aid")
-aid(demo3, type = "biomass", alternative="greater")
+aid(demo3, type = "biomass", alternative="greater", paired=FALSE)
 }
 \seealso{
 \code{\link{grade.test}}, \code{\link{lesion.test}}, \code{\link{biomass.test}}, \code{\link{grade.barplot}}, \code{\link{lesion.barplot}} and \code{\link{biomass.barplot}}.

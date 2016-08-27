@@ -4,12 +4,14 @@
 \alias{grade.barplot}
 \title{Plot grade data}
 \usage{
-grade.barplot(ino, alternative)
+grade.barplot(ino, alternative, paired, ...)
 }
 \arguments{
 \item{ino}{a list contains inoculation grade data.}
 
 \item{alternative}{a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less". You can specify just the initial letter.}
+
+\item{paired}{a character string specifying if the experiment is paired, can be TRUE or FALSE (default). You can specify just the initial letter.}
 }
 \description{
 Create a barplot for grade inoculation data
@@ -17,7 +19,7 @@ Create a barplot for grade inoculation data
 \examples{
 demo <- system.file("extdata", "demo1.tsv", package="aid")
 dat <- read.table(demo, header = TRUE, check.names=FALSE)
-grade.barplot(dat, alternative)
+grade.barplot(dat, alternative = "t", paired = FALSE)
 }
 \seealso{
 \code{\link{aid}}, \code{\link{ino.colors}}, \code{\link{grade.test}}, \code{\link{dsi}}, \code{\link{lesion.barplot}} and \code{\link{biomass.barplot}}.

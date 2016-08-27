@@ -4,12 +4,14 @@
 \alias{biomass.barplot}
 \title{Plot biomass data}
 \usage{
-biomass.barplot(ino, alternative)
+biomass.barplot(ino, alternative, paired, ...)
 }
 \arguments{
 \item{ino}{a list contains inoculation biomass data.}
 
 \item{alternative}{a character string specifying the alternative hypothesis, must be one of "two.sided" (default), "greater" or "less". You can specify just the initial letter.}
+
+\item{paired}{a character string specifying if the experiment is paired, can be TRUE or FALSE (default). You can specify just the initial letter.}
 }
 \description{
 Create a barplot for biomass (qPCR) inoculation data
@@ -17,7 +19,7 @@ Create a barplot for biomass (qPCR) inoculation data
 \examples{
 demo <- system.file("extdata", "demo3.tsv", package="aid")
 dat <- read.table(demo, header = TRUE, check.names=FALSE)
-biomass.barplot(dat, alternative)
+biomass.barplot(dat, alternative = "t", paired = FALSE)
 }
 \seealso{
 \code{\link{aid}}, \code{\link{biomass.test}}, \code{\link{lesion.barplot}} and \code{\link{grade.barplot}}.

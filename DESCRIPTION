@@ -1,8 +1,8 @@
 Package: aid
 Type: Package
 Title: an R package for the analysis of inoculation data
-Version: 0.1
-Date: 2014-12-10
+Version: 0.2
+Date: 2016-08-27
 Author: Qinhu Wang
 Maintainer: Qinhu Wang <wangqinhu@nwafu.edu.cn>
 Description: Analysis and illustration of inoculation data
